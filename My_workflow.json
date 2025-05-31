@@ -1,0 +1,169 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://api.openweathermap.org/data/2.5/weather?q=London&appid=5bfdb704627988c7e0d0bfcb3423b7f1&units=metric",
+        "options": {}
+      },
+      "name": "Get Weather",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        140,
+        140
+      ],
+      "id": "ba727744-dc61-422f-b35e-71175b801b0a"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  City: $json.name,\n  Temperature: $json.main.temp,\n  Condition: $json.weather[0].description,\n  Time: new Date().toISOString()\n}];\n"
+      },
+      "name": "Format Weather",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        360,
+        140
+      ],
+      "id": "90259b44-5dc2-428f-b10e-97e8540795e7"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        140
+      ],
+      "id": "e3b4d5c2-86f8-404a-b2a4-3800788a7020",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1psMhY6eX-m90HB2AwFTLu6prv7DDpwGidsMM35uGHv4",
+          "mode": "list",
+          "cachedResultName": "Weather App",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1psMhY6eX-m90HB2AwFTLu6prv7DDpwGidsMM35uGHv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1psMhY6eX-m90HB2AwFTLu6prv7DDpwGidsMM35uGHv4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "City",
+              "displayName": "City",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Temperature",
+              "displayName": "Temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Condition",
+              "displayName": "Condition",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        580,
+        140
+      ],
+      "id": "ac67af65-47a7-4467-ac4c-a88a77a5ef74",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "AxOlq1NuKUDqdVZ9",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get Weather": {
+      "main": [
+        [
+          {
+            "node": "Format Weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get Weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Weather": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0decdf7b-e6c3-4016-92b3-d86f3dcfc80b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "613de0b9131db9d205ac77773a3b047d1136bd6a3db57e99e667ffa3d2250d60"
+  },
+  "id": "H8VOYNkwZg13Vo2l",
+  "tags": []
+}
